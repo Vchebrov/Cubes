@@ -5,6 +5,9 @@ public class CubeInfo : MonoBehaviour
 {
     [SerializeField] private int _chanceToSplit = 100;
 
+    private int _maxChance = 101;
+    private int _minChance = 0;
+
     private List<Rigidbody> _childCubes = new();
 
     private int _chanceModificator = 2;
@@ -13,7 +16,7 @@ public class CubeInfo : MonoBehaviour
    
     public bool Split()
     { 
-        if (UnityEngine.Random.Range(0, 101) <= _chanceToSplit)
+        if (Random.Range(_minChance, _maxChance) <= _chanceToSplit)
         {
             _chanceToSplit /= _chanceModificator;
             return true;

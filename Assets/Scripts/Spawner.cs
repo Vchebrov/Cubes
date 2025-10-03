@@ -5,7 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Clicker))]
 public class Spawner : MonoBehaviour
 {
-    private Clicker _clicker;    
+    private Clicker _clicker;
+
+    [SerializeField] private CubeInfo _prefab;
 
     private float _verticalMax = 3f;
     private float _horizontalMax = 9f;
@@ -46,11 +48,11 @@ public class Spawner : MonoBehaviour
 
             for (int i = 0; i <= cubeCount; i++)
             {                
-                GameObject newCube = Instantiate(obj, new Vector3(UnityEngine.Random.Range(_horizontalMin, _horizontalMax),
+                CubeInfo newCube = Instantiate(_prefab, new Vector3(UnityEngine.Random.Range(_horizontalMin, _horizontalMax),
                     UnityEngine.Random.Range(_verticalMin, _verticalMax),
                     UnityEngine.Random.Range(_horizontalMin, _horizontalMax)), Quaternion.identity);
-
-                newCube.GetComponent<CubeInfo>().ResetChance();
+                              
+                newCube.ResetChance();
 
                 newCube.transform.localScale = objScale / _scaleModificator;
 
@@ -58,7 +60,7 @@ public class Spawner : MonoBehaviour
                     UnityEngine.Random.Range(_colorMin, _colorMax),
                     UnityEngine.Random.Range(_colorMin, _colorMax));
                 
-                obj.GetComponent<CubeInfo>().ChildCubes.Add(GetRigidbody(newCube));
+                obj.GetComponent<CubeInfo>().ChildCubes.Add(newCube.GetComponent<Rigidbody>());
             }
         }
         else
@@ -67,10 +69,5 @@ public class Spawner : MonoBehaviour
             Destroy(obj);
             _cubesToBeExpoded.Clear();
         }
-    }   
-
-    private Rigidbody GetRigidbody(GameObject cube)
-    {
-        return cube.GetComponent<Rigidbody>();
-    }
+    }     
 }

@@ -485,6 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98fda5c904df5141b0c04f2fe76d184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _prefab: {fileID: 3713785308098447879, guid: e53574c2d0d6f40488207d5282fc812e, type: 3}
 --- !u!114 &330585550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,6 +501,7 @@ MonoBehaviour:
   _explosionRadius: 100
   _explosionForce: 100
   _effect: {fileID: 198917022394846920, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
+  _upwardsModifier: 0.1
 --- !u!1 &377112381
 GameObject:
   m_ObjectHideFlags: 0

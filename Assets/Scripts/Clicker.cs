@@ -15,7 +15,7 @@ public class Clicker : MonoBehaviour
 
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Cube"))
+            if (Physics.Raycast(ray, out hit) && hit.collider.TryGetComponent(out CubeInfo info))
             {
                 Clicked?.Invoke(hit.collider.GetComponent<CubeInfo>());
             }            

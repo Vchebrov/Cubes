@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Spawner))]
 public class Explosion : MonoBehaviour
 {
-    private Spawner _creator;
+    private Spawner _spawner;
 
     [SerializeField] private float _explosionRadius = 100;
     [SerializeField] private float _explosionForce = 10;
@@ -13,13 +13,13 @@ public class Explosion : MonoBehaviour
 
     private void OnEnable()
     {
-        _creator = GetComponent<Spawner>();
-        _creator.BarrelsAdded += Explode;
+        _spawner = GetComponent<Spawner>();
+        _spawner.BarrelsAdded += Explode;
     }
 
     private void OnDisable()
     {
-        _creator.BarrelsAdded -= Explode;
+        _spawner.BarrelsAdded -= Explode;
     }
 
     private void Explode(List<Rigidbody> cubesToBeExploded, Vector3 position, GameObject obj)
