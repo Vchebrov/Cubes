@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Clicker))]
+[RequireComponent(typeof(Raycaster))]
 public class Spawner : MonoBehaviour
 {
-    private Clicker _clicker;
+    private Raycaster _rayCaster;
 
     [SerializeField] private CubeInfo _prefab;
 
@@ -24,14 +24,14 @@ public class Spawner : MonoBehaviour
 
     private void OnEnable()
     {        
-        _clicker = GetComponent<Clicker>();
+        //_rayCaster = GetComponent<Raycaster>();
 
-        _clicker.Clicked += OnCreate;
+        //_rayCaster._cubeInfo += OnCreate;
     }
 
     private void OnDisable()
     {
-        _clicker.Clicked -= OnCreate;
+        //_rayCaster._cubeInfo -= OnCreate;
     }
 
     private void OnCreate(CubeInfo cubeInfo)
@@ -60,7 +60,7 @@ public class Spawner : MonoBehaviour
                     UnityEngine.Random.Range(_colorMin, _colorMax),
                     UnityEngine.Random.Range(_colorMin, _colorMax));
                 
-                obj.GetComponent<CubeInfo>().ChildCubes.Add(newCube.GetComponent<Rigidbody>());
+                obj.GetComponent<CubeInfo>().ChildCubes.Add(newCube.Body);
             }
         }
         else

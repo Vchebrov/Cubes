@@ -12,7 +12,9 @@ public class CubeInfo : MonoBehaviour
 
     private int _chanceModificator = 2;
 
-    public List<Rigidbody> ChildCubes => _childCubes;
+    public Rigidbody Body { get; private set;}
+
+    public List<Rigidbody> ChildCubes => _childCubes;        
    
     public bool Split()
     { 
@@ -30,5 +32,10 @@ public class CubeInfo : MonoBehaviour
     public void ResetChance()
     {
         _chanceToSplit = 100;
+    }
+
+    private void Awake()
+    {
+        Body = GetComponent<Rigidbody>();
     }
 }
