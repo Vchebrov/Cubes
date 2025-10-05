@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Interface))]
+[RequireComponent(typeof(InteractionController))]
 public class Spawner : MonoBehaviour
-{   
-    private Interface _interface;
-
+{
     [SerializeField] private CubeInfo _prefab;
 
     private float _verticalMax = 3f;
@@ -20,20 +18,9 @@ public class Spawner : MonoBehaviour
     private int _maxCubeNumber = 6;
     private int _scaleModificator = 2;    
 
-    public event Action<List<Rigidbody>, Vector3, GameObject> BarrelsAdded;
+    public event Action<List<Rigidbody>, Vector3, GameObject> BarrelsAdded;       
 
-    private void OnEnable()
-    {         
-        _interface = GetComponent<Interface>();
-        _interface.Create += OnCreate;        
-    }
-
-    private void OnDisable()
-    {        
-        _interface.Create -= OnCreate;
-    }
-
-    private void OnCreate(CubeInfo cubeInfo)
+    public void OnCreate(CubeInfo cubeInfo)
     {
         var obj = cubeInfo.gameObject;
 

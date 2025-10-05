@@ -8,9 +8,12 @@ public class Raycaster : MonoBehaviour
 
     public event Action<CubeInfo> _cubeInfo;
 
-    private void OnEnable()
+    private void Awake()
     {
         _inputReader = GetComponent<InputReader>();
+    }
+    private void OnEnable()
+    {        
         _inputReader.Clicked += OnClicked;
     }
 
@@ -29,7 +32,7 @@ public class Raycaster : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit) && hit.collider.TryGetComponent(out CubeInfo info))
             {
-                _cubeInfo?.Invoke(hit.collider.GetComponent<CubeInfo>());
+                _cubeInfo?.Invoke(info);
             }
         }
     }    
