@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Raycaster))]
+[RequireComponent(typeof(Interface))]
 public class Spawner : MonoBehaviour
-{
-    private Raycaster _rayCaster;
+{   
+    private Interface _interface;
 
     [SerializeField] private CubeInfo _prefab;
 
@@ -23,15 +23,14 @@ public class Spawner : MonoBehaviour
     public event Action<List<Rigidbody>, Vector3, GameObject> BarrelsAdded;
 
     private void OnEnable()
-    {        
-        //_rayCaster = GetComponent<Raycaster>();
-
-        //_rayCaster._cubeInfo += OnCreate;
+    {         
+        _interface = GetComponent<Interface>();
+        _interface.Create += OnCreate;        
     }
 
     private void OnDisable()
-    {
-        //_rayCaster._cubeInfo -= OnCreate;
+    {        
+        _interface.Create -= OnCreate;
     }
 
     private void OnCreate(CubeInfo cubeInfo)

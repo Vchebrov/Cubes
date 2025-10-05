@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Spawner))]
+[RequireComponent(typeof(Interface))]
 public class Explosion : MonoBehaviour
-{
-    private Spawner _spawner;
+{   
+    private Interface _interface;
 
     [SerializeField] private float _explosionRadius = 100;
     [SerializeField] private float _explosionForce = 10;
@@ -12,17 +12,17 @@ public class Explosion : MonoBehaviour
     [SerializeField] private float _upwardsModifier = 0.1f;
 
     private void OnEnable()
-    {
-        _spawner = GetComponent<Spawner>();
-        _spawner.BarrelsAdded += Explode;
+    {        
+        _interface = GetComponent<Interface>();
+        _interface.Explose += OnExplode;        
     }
 
     private void OnDisable()
-    {
-        _spawner.BarrelsAdded -= Explode;
+    {        
+        _interface.Explose -= OnExplode;
     }
 
-    private void Explode(List<Rigidbody> cubesToBeExploded, Vector3 position, GameObject obj)
+    private void OnExplode(List<Rigidbody> cubesToBeExploded, Vector3 position, GameObject obj)
     {
         if (obj != null)
         {
