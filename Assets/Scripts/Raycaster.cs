@@ -6,7 +6,7 @@ public class Raycaster : MonoBehaviour
 {
     private InputReader _inputReader;
 
-    public event Action<CubeInfo> _cubeInfo;
+    public event Action<CubeInfo> GettingCube;
 
     private void Awake()
     {
@@ -26,13 +26,11 @@ public class Raycaster : MonoBehaviour
     {
         if (isClicked)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);                      
 
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit) && hit.collider.TryGetComponent(out CubeInfo info))
+            if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.TryGetComponent(out CubeInfo info))
             {
-                _cubeInfo?.Invoke(info);
+                GettingCube?.Invoke(info);
             }
         }
     }    

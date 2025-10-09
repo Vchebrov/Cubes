@@ -1,59 +1,60 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(InteractionController))]
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private CubeInfo _prefab;
 
+    private List<Rigidbody> _cubesToBeExploded = new();
+
     private float _verticalMax = 3f;
     private float _horizontalMax = 9f;
     private float _verticalMin = 1f;
     private float _horizontalMin = 1f;
-    private float _colorMin = 0.3f;
-    private float _colorMax = 0.7f;
+    private float hueMin = 0f;
+    private float hueMax = 1f;
+    private float saturationMin = 0.6f;
+    private float saturationMax = 1f;
+    private float valueMin = 0.6f;
+    private float valueMax = 1f;
 
     private int _minCubeNumber = 2;
     private int _maxCubeNumber = 6;
-    private int _scaleModificator = 2;    
+    private int _scaleModificator = 2;       
 
-    public event Action<List<Rigidbody>, Vector3, GameObject> BarrelsAdded;       
-
-    public void OnCreate(CubeInfo cubeInfo)
+    public (List<Rigidbody> cubes, Vector3 position, Transform parent) OnCreate(CubeInfo cubeInfo)
     {
-        var obj = cubeInfo.gameObject;
+        _cubesToBeExploded.Clear();
 
-        List<Rigidbody> _cubesToBeExpoded = new();
+        int cubeCount = Random.Range(_minCubeNumber, _maxCubeNumber + 1);
 
-        if (cubeInfo.Split())
+        var objScale = cubeInfo.transform.localScale;
+
+        for (int i = 0; i < cubeCount; i++)
         {
-            int cubeCount = UnityEngine.Random.Range(_minCubeNumber, _maxCubeNumber + 1);
+            CubeInfo newCube = Instantiate(_prefab, InitiateCubePosition(), Quaternion.identity);
 
-            var objScale = obj.transform.localScale;
+            newCube.transform.localScale = objScale / _scaleModificator;
 
-            for (int i = 0; i <= cubeCount; i++)
-            {                
-                CubeInfo newCube = Instantiate(_prefab, new Vector3(UnityEngine.Random.Range(_horizontalMin, _horizontalMax),
-                    UnityEngine.Random.Range(_verticalMin, _verticalMax),
-                    UnityEngine.Random.Range(_horizontalMin, _horizontalMax)), Quaternion.identity);
-                              
-                newCube.ResetChance();
+            newCube.GetComponent<Renderer>().material.color = Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, valueMin, valueMax);
 
-                newCube.transform.localScale = objScale / _scaleModificator;
+            _cubesToBeExploded.Add(newCube.Body);
+        }        
 
-                newCube.GetComponent<Renderer>().material.color = new Color(UnityEngine.Random.Range(_colorMin, _colorMax),
-                    UnityEngine.Random.Range(_colorMin, _colorMax),
-                    UnityEngine.Random.Range(_colorMin, _colorMax));
-                
-                obj.GetComponent<CubeInfo>().ChildCubes.Add(newCube.Body);
-            }
-        }
-        else
-        {
-            BarrelsAdded?.Invoke(obj.GetComponent<CubeInfo>().ChildCubes, obj.transform.position, obj);
-            Destroy(obj);
-            _cubesToBeExpoded.Clear();
-        }
-    }     
+        Destroy(cubeInfo.gameObject);
+
+        return (_cubesToBeExploded, cubeInfo.transform.position, cubeInfo.transform);
+    }
+
+    private Vector3 InitiateCubePosition()
+    {
+        float x = Random.Range(_horizontalMin, _horizontalMax);
+        float y = Random.Range(_verticalMin, _verticalMax);
+        float z = Random.Range(_horizontalMin, _horizontalMax);
+
+        return new Vector3(x, y, z);
+    }
 }

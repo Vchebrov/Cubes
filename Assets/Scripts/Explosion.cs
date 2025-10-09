@@ -9,9 +9,9 @@ public class Explosion : MonoBehaviour
     [SerializeField] private ParticleSystem _effect;
     [SerializeField] private float _upwardsModifier = 0.1f;
     
-    public void OnExplode(List<Rigidbody> cubesToBeExploded, Vector3 position, GameObject obj)
+    public void OnExplode(List<Rigidbody> cubesToBeExploded, Vector3 position, Transform parent)
     {
-        if (obj != null)
+        if (parent != null)
         {
             var effectInstance = Instantiate(_effect, position, Quaternion.identity);
             

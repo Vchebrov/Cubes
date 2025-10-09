@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Raycaster), typeof(Spawner), typeof(Explosion))]
@@ -18,23 +19,31 @@ public class InteractionController : MonoBehaviour
 
     private void OnEnable()
     {        
-        _raycaster._cubeInfo += OnClick;
-        _spawner.BarrelsAdded += OnExplode;
+        _raycaster.GettingCube += OnClick;       
     }
 
     private void OnDisable()
     {
-        _raycaster._cubeInfo -= OnClick;
-        _spawner.BarrelsAdded -= OnExplode;
-    }
+        _raycaster.GettingCube -= OnClick;        
+    }   
 
     private void OnClick(CubeInfo cubeInfo)
-    {        
-        _spawner.OnCreate(cubeInfo);
+    {
+        if (cubeInfo == null) return;
+
+        if (cubeInfo.InitiateSplitChance())
+        {           
+            var (cubes, position, parent) = _spawner.OnCreate(cubeInfo);
+            _explosion.OnExplode(cubes, position, parent);
+        }
+        else
+        {
+            Destroy(cubeInfo.gameObject);
+        }
     }
 
-    private void OnExplode(List<Rigidbody> _cubes, Vector3 position, GameObject obj)
+    private void OnExplode(List<Rigidbody> _cubes, Vector3 position, Transform parent)
     {        
-        _explosion.OnExplode(_cubes, position, obj);
+        _explosion.OnExplode(_cubes, position, parent);
     }
 }
