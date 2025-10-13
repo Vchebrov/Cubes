@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CubeInfo : MonoBehaviour
 {
-    static private int _chanceToSplit = 100;
+    private static int _chanceToSplit = 100;
 
     private int _maxChance = 101;
     private int _minChance = 0;    
@@ -14,9 +14,8 @@ public class CubeInfo : MonoBehaviour
     private void Awake()
     {
         Body = GetComponent<Rigidbody>();
-    }
-   
-    public bool InitiateSplitChance()
+    }   
+    public bool CanSplit()
     { 
         Debug.Log(_chanceToSplit);
 

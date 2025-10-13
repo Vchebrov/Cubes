@@ -5,13 +5,14 @@ public class InputReader : MonoBehaviour
 {
     private int _buttonIdentificator = 0;
 
-    public event Action<bool> Clicked;
+    public event Action<Vector3> Clicked;
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(_buttonIdentificator))
-        {            
-                Clicked?.Invoke(true);                     
+        {
+            var pointer = Input.mousePosition;
+            Clicked?.Invoke(pointer);
         }
     }
 }

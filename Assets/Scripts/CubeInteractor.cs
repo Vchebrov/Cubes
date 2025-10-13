@@ -4,12 +4,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Raycaster), typeof(Spawner), typeof(Explosion))]
-public class InteractionController : MonoBehaviour
+public class CubeInteractor : MonoBehaviour
 {
     private Raycaster _raycaster;
     private Spawner _spawner;
     private Explosion _explosion;    
-
     private void Awake()
     {
         _raycaster = GetComponent<Raycaster>();
@@ -29,21 +28,18 @@ public class InteractionController : MonoBehaviour
 
     private void OnClick(CubeInfo cubeInfo)
     {
-        if (cubeInfo == null) return;
+        if (cubeInfo == null) 
+            return;
 
-        if (cubeInfo.InitiateSplitChance())
-        {           
-            var (cubes, position, parent) = _spawner.OnCreate(cubeInfo);
-            _explosion.OnExplode(cubes, position, parent);
+        if (cubeInfo.CanSplit())
+        {            
+            List<Rigidbody> cubes = _spawner.CreateCubes(cubeInfo);
+            _explosion.Explode(cubes, cubeInfo.transform.position, cubeInfo.transform);
+            Destroy(cubeInfo.gameObject);
         }
         else
         {
             Destroy(cubeInfo.gameObject);
         }
-    }
-
-    private void OnExplode(List<Rigidbody> _cubes, Vector3 position, Transform parent)
-    {        
-        _explosion.OnExplode(_cubes, position, parent);
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(InteractionController))]
+[RequireComponent(typeof(CubeInteractor))]
 public class Explosion : MonoBehaviour
 {
     [SerializeField] private float _explosionRadius = 100;
@@ -9,7 +9,7 @@ public class Explosion : MonoBehaviour
     [SerializeField] private ParticleSystem _effect;
     [SerializeField] private float _upwardsModifier = 0.1f;
     
-    public void OnExplode(List<Rigidbody> cubesToBeExploded, Vector3 position, Transform parent)
+    public void Explode(List<Rigidbody> cubesToBeExploded, Vector3 position, Transform parent)
     {
         if (parent != null)
         {

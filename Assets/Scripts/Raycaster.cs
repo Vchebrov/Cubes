@@ -13,7 +13,7 @@ public class Raycaster : MonoBehaviour
         _inputReader = GetComponent<InputReader>();
     }
     private void OnEnable()
-    {        
+    {
         _inputReader.Clicked += OnClicked;
     }
 
@@ -22,16 +22,14 @@ public class Raycaster : MonoBehaviour
         _inputReader.Clicked -= OnClicked;
     }
 
-    private void OnClicked(bool isClicked)
+    private void OnClicked(Vector3 pointer)
     {
-        if (isClicked)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);                      
 
-            if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.TryGetComponent(out CubeInfo info))
-            {
-                GettingCube?.Invoke(info);
-            }
+        Ray ray = Camera.main.ScreenPointToRay(pointer);
+
+        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.TryGetComponent(out CubeInfo info))
+        {
+            GettingCube?.Invoke(info);
         }
-    }    
+    }
 }

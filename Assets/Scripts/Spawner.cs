@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[RequireComponent(typeof(InteractionController))]
+[RequireComponent(typeof(CubeInteractor))]
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private CubeInfo _prefab;
 
-    private List<Rigidbody> _cubesToBeExploded = new();
+    private List<Rigidbody> _cubesToBeExploded = new();   
 
     private float _verticalMax = 3f;
     private float _horizontalMax = 9f;
@@ -23,9 +23,9 @@ public class Spawner : MonoBehaviour
 
     private int _minCubeNumber = 2;
     private int _maxCubeNumber = 6;
-    private int _scaleModificator = 2;       
+    private int _scaleModificator = 2;   
 
-    public (List<Rigidbody> cubes, Vector3 position, Transform parent) OnCreate(CubeInfo cubeInfo)
+    public List<Rigidbody>  CreateCubes(CubeInfo cubeInfo)
     {
         _cubesToBeExploded.Clear();
 
@@ -39,14 +39,23 @@ public class Spawner : MonoBehaviour
 
             newCube.transform.localScale = objScale / _scaleModificator;
 
-            newCube.GetComponent<Renderer>().material.color = Random.ColorHSV(hueMin, hueMax, saturationMin, saturationMax, valueMin, valueMax);
+            if (newCube.TryGetComponent(out Renderer renderer))
+            {
+                renderer.material.color = Random.ColorHSV(
+                    hueMin, hueMax,
+                    saturationMin, saturationMax,
+                    valueMin, valueMax
+                );
+            }
+            else
+            {
+                Debug.LogWarning($"{newCube.name}: Renderer не найден, цвет не изменён.");
+            }
 
             _cubesToBeExploded.Add(newCube.Body);
-        }        
+        }
 
-        Destroy(cubeInfo.gameObject);
-
-        return (_cubesToBeExploded, cubeInfo.transform.position, cubeInfo.transform);
+        return _cubesToBeExploded;
     }
 
     private Vector3 InitiateCubePosition()
