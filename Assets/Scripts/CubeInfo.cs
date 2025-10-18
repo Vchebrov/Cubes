@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class CubeInfo : MonoBehaviour
 {
-    private static int _chanceToSplit = 100;
+    [SerializeField] private float _chanceToSplit = 100f;
 
     private int _maxChance = 101;
     private int _minChance = 0;    
 
-    private int _chanceModificator = 2;
+    private float _chanceModificator = 2f;
 
     public Rigidbody Body { get; private set;}
          
@@ -17,11 +17,11 @@ public class CubeInfo : MonoBehaviour
     }   
     public bool CanSplit()
     { 
-        Debug.Log(_chanceToSplit);
+        Debug.Log($"Original chance = {_chanceToSplit}");
 
-        bool pass = Random.Range(_minChance, _maxChance) <= _chanceToSplit;
+        bool pass = Random.Range(_minChance, _maxChance) <= _chanceToSplit;       
         _chanceToSplit /= _chanceModificator;
 
         return pass;        
-    }    
+    } 
 }

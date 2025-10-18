@@ -35,17 +35,17 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < cubeCount; i++)
         {
-            CubeInfo newCube = Instantiate(_prefab, InitiateCubePosition(), Quaternion.identity);
+            CubeInfo newCube = Instantiate(cubeInfo, InitiateCubePosition(), Quaternion.identity);
 
             newCube.transform.localScale = objScale / _scaleModificator;
-
+           
             if (newCube.TryGetComponent(out Renderer renderer))
             {
                 renderer.material.color = Random.ColorHSV(
                     hueMin, hueMax,
                     saturationMin, saturationMax,
                     valueMin, valueMax
-                );
+                );                
             }
             else
             {
