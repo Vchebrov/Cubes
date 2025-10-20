@@ -1,27 +1,34 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.Image;
 
 [RequireComponent(typeof(CubeInteractor))]
 public class Explosion : MonoBehaviour
-{
-    [SerializeField] private float _explosionRadius = 100;
+{    
+    [SerializeField] private float _radius = 10f;
     [SerializeField] private float _explosionForce = 10;
-    [SerializeField] private ParticleSystem _effect;
-    [SerializeField] private float _upwardsModifier = 0.1f;
-    
-    public void Explode(List<Rigidbody> cubesToBeExploded, Vector3 position, Transform parent)
-    {
-        if (parent != null)
-        {
-            var effectInstance = Instantiate(_effect, position, Quaternion.identity);
-            
-            foreach (Rigidbody cube in cubesToBeExploded)
-            {
-                effectInstance.Play();
-                cube.AddExplosionForce(_explosionForce, position, _explosionRadius, _upwardsModifier, ForceMode.Impulse);
-            }
+    [SerializeField] private ParticleSystem _effect;    
 
-            Destroy(effectInstance.gameObject, effectInstance.main.duration);
+    public void Explode(CubeInfo cubeInfo)
+    {
+        var effectInstance = Instantiate(_effect, cubeInfo.transform.position, Quaternion.identity);
+        effectInstance.Play();
+
+        var hits = Physics.OverlapSphere(cubeInfo.transform.position, _radius);
+        Debug.Log($"Explosion force = {_explosionForce * cubeInfo.ExplosionModificator}");
+
+        foreach (var cube in hits)
+        {
+
+            if (!cube.attachedRigidbody)
+                continue;
+
+            var rb = cube.attachedRigidbody;
+            rb.AddExplosionForce(_explosionForce * cubeInfo.ExplosionModificator, cubeInfo.transform.position, _radius, 0f, ForceMode.Impulse);
+
         }
-    }
+
+        Destroy(effectInstance.gameObject, effectInstance.main.duration);
+
+    } 
 }

@@ -32,13 +32,13 @@ public class CubeInteractor : MonoBehaviour
             return;
 
         if (cubeInfo.CanSplit())
-        {            
-            List<Rigidbody> cubes = _spawner.CreateCubes(cubeInfo);
-            _explosion.Explode(cubes, cubeInfo.transform.position, cubeInfo.transform);
-            Destroy(cubeInfo.gameObject);
+        {
+            cubeInfo.RecalculateChance();
+            List<Rigidbody> cubeBodies = _spawner.CreateCubesBodies(cubeInfo);
         }
         else
         {
+            _explosion.Explode(cubeInfo);
             Destroy(cubeInfo.gameObject);
         }
     }

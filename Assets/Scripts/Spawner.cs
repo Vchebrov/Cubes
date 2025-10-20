@@ -14,18 +14,18 @@ public class Spawner : MonoBehaviour
     private float _horizontalMax = 9f;
     private float _verticalMin = 1f;
     private float _horizontalMin = 1f;
-    private float hueMin = 0f;
-    private float hueMax = 1f;
-    private float saturationMin = 0.6f;
-    private float saturationMax = 1f;
-    private float valueMin = 0.6f;
-    private float valueMax = 1f;
+    private float _hueMin = 0f;
+    private float _hueMax = 1f;
+    private float _saturationMin = 0.6f;
+    private float _saturationMax = 1f;
+    private float _valueMin = 0.6f;
+    private float _valueMax = 1f;
 
     private int _minCubeNumber = 2;
     private int _maxCubeNumber = 6;
     private int _scaleModificator = 2;   
 
-    public List<Rigidbody>  CreateCubes(CubeInfo cubeInfo)
+    public List<Rigidbody>  CreateCubesBodies(CubeInfo cubeInfo)
     {
         _cubesToBeExploded.Clear();
 
@@ -37,14 +37,15 @@ public class Spawner : MonoBehaviour
         {
             CubeInfo newCube = Instantiate(cubeInfo, InitiateCubePosition(), Quaternion.identity);
 
-            newCube.transform.localScale = objScale / _scaleModificator;
-           
+            newCube.transform.localScale = objScale / _scaleModificator;   
+            newCube.RecalculateExplosionModificators();            
+
             if (newCube.TryGetComponent(out Renderer renderer))
             {
                 renderer.material.color = Random.ColorHSV(
-                    hueMin, hueMax,
-                    saturationMin, saturationMax,
-                    valueMin, valueMax
+                    _hueMin, _hueMax,
+                    _saturationMin, _saturationMax,
+                    _valueMin, _valueMax
                 );                
             }
             else
